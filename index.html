@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velammal Engineering College</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        #gif {
+            display: none; /* Hide the GIF initially */
+            margin-top: 20px;
+        }
+        #thankYouMessage {
+            display: none; /* Hide the thank you message initially */
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <img src="logo.png" alt="College Logo" class="logo">
+        <form id="infoForm" onsubmit="submitForm(event);">
+            <label for="name">Name put intial at last</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="mail">Mail ID</label>
+            <input type="text" id="mail" name="mail" required>
+
+            <label for="branch">Branch</label>
+            <input type="text" id="branch" name="branch" required>
+
+            <label for="section">Section</label>
+            <input type="text" id="section" name="section" required>
+
+            <button type="submit">Submit</button>
+        </form>
+        <img id="gif" src="sample.gif" alt="Loading GIF" width="325" height="auto"> <!-- Replace with your GIF -->
+        <div id="thankYouMessage">Thank you, your information has been recorded.</div>
+    </div>
+
+    <script>
+        function submitForm(event) {
+            event.preventDefault(); // Prevent the default form submission
+            const nameInput = document.getElementById('name').value;
+            const mailInput = document.getElementById('mail').value;
+            const branchInput = document.getElementById('branch').value;
+            const sectionInput = document.getElementById('section').value;
+            const gif = document.getElementById('gif');
+            const thankYouMessage = document.getElementById('thankYouMessage');
+
+            // Create a FormData object to send form data via AJAX
+            const formData = new FormData();
+            formData.append('name', nameInput);
+            formData.append('mail', mailInput);
+            formData.append('branch', branchInput);
+            formData.append('section', sectionInput);
+
+            if (nameInput.startsWith('')) {
+                gif.style.display = 'none'; // Show the GIF
+                thankYouMessage.style.display = 'none'; // Hide thank you message
+            } else {
+                gif.style.display = 'none'; // Hide the GIF
+                thankYouMessage.style.display = 'block'; // Show thank you message
+            }
+
+            // Send form data via AJAX
+            fetch('submit.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log('Form submitted successfully:', data);
+                // Optionally clear the form fields
+                document.getElementById('infoForm').reset();
+            })
+            .catch(error => {
+                console.error('Error submitting form:', error);
+            });
+        }
+    </script>
+</body>
+</html>
